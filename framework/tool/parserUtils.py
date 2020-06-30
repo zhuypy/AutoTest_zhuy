@@ -56,3 +56,26 @@ def getDataFromExcel(file):
                 d[k] = v
         data[name] = d
     return data
+
+def writeDataInExcel(data,file):
+    '''
+    将字典写入Excel文件
+    :param data:
+    :return:
+    '''
+    table = xlwt.Workbook(encoding='utf-8')
+    for sheetName in data.keys():
+        sheet  = table.add_sheet(sheetname=sheetName)
+        row_nummber = 0
+        for row_header in data.get(sheetName).keys():
+            row_value = data.get(sheetName).get(row_header)
+            sheet.write(row_nummber, 0, row_header)
+            if 'str'in str(type(row_value))and  len(row_value)!=0:
+                sheet.write(row_nummber, 1, row_value)
+            elif 'list'in str(type(row_value)) and  len(row_value)!=0:
+                col_number =1
+                for i in row_value:
+                    sheet.write(row_nummber, col_number, row_value)
+                    col_number+=1
+            row_nummber += 1
+    table.save(file)
